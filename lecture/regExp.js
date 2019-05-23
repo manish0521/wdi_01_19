@@ -86,4 +86,29 @@
  * 7. [\w'’-]+ but what if user enter "1,000,000"
  * 8. [^ ]+ it matches everything that is not a space
  * 9. [^ ]+\b
- * /
+ */ 
+
+let regExp = new RegExp(".*", "g")
+let matches = "some string".match(regExp)
+
+console.log(`matches: `, matches);
+
+// Write your own version of includes() method on String that ignores letter case, and without using existing includes() method.
+
+// solution("Hello, world", "Hello")   == true
+// solution("Hello, world", "WORLD")   == true
+// solution("Hello, world", "Goodbye") == false
+
+console.assert(solution("Hello, world", "Hello")   == true,  `Error`);
+console.assert(solution("Hello, world", "WORLD")   == true,  `Error`);
+console.assert(solution("Hello, world", "Goodbye") == false, `Error`);
+
+
+
+
+
+
+
+
+
+
