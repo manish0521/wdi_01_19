@@ -86,29 +86,138 @@
  * 7. [\w'’-]+ but what if user enter "1,000,000"
  * 8. [^ ]+ it matches everything that is not a space
  * 9. [^ ]+\b
- */ 
+ * 
+ * Grouping
+ * if we want to match dates like “April 25th” and “Apr 25”
+ * 1. Apri?l? \d\dt?h? wich also accepts "Aprl 25h"
+ * A solution is to use grouping, which lets you make sub-expressions inside your regex, then apply a quantifier. To do this, use parentheses. For example, the “il” in April and the “th” in “25th” should either be present in their entirety or not present at all – zero or one matches of that particular text. We write that as (il)? and (th)?, so we can craft a much better regex like this:
+ * 2. Apr(il)? \d\d(th)?
+ * 3. Enter "April 25th"
+ * 4. box marked “Match Information”, showing “il” and “th” – the matches for our two groups.
+ * 
+ * Grouped alternatives
+ * Groups become really powerful when you use them to specify multiple variations. This is done by writing a pipe symbol, |, inside your groups, like this: (foo|bar). That will match either word but not both, so you can allow variation from users within the same regex.
+ * 1. You want to parse a sentence of user text that matches the structure “I like paintings by Caravaggio” or “I like sculptures by Rodin”. You don’t know who the artist might be, but you do know that it’s going to be a painting or a sculpture – we don’t want to match “I like music by Sam Smith”.
+ * 2. I like paintings by \w+    matches “I like paintings by...”
+ * What we have so far will match “I like paintings by Caravaggio” and “I like paintings by Rodin”, but not “I like sculptures by Rodin” – to do that we need a grouped alternative for “paintings”, like this:
+ * 3. I like (paintings|sculptures) by \w+
+ * 
+ * Greedy, lazy, and eager matching
+ * Regex engines are considered “eager” because they are programmed to return the first valid match, even if there is a better match available.
+ * This is important when working with grouped alternatives, because the regex engine checks them in the order you provide.
+ * 1. (get|getName|set|setName) 
+ * 2. given the string “setName”, which of those four options do you think will be matched? -- set
+ * 3. (getName|get|setName|set) does the same thing as (get|getName|set|setName) but will always match the longest string it can.
+ * *, +, ? are also greedy by default, which means they will match as much as possible.
+ * 4. enter string "That's it: I'm invoking Space Corp Directive 68250." said Rimmer. "68250?" replied Kryten, "but sir surely that's impossible without at least one live chicken and a rabbi?"
+ * 5. try to match “That's it: I'm invoking Space Corp Directive 68250.” and “68250?” and “but sir surely that's impossible without at least one live chicken and a rabbi?”
+ * 6. ".*"
+ * Lazy matching means “match this thing as few times as possible,” and it’s enabled by adding a question mark to your existing quantifier.
+ * 7. ".*?", which means "match a quote, then as few characters as possible before we reach the next quote."
+ * 8. as a more precise alternatives we can use "[^”]+" it means “match a quote, then match everything up to the next quote.”
+ * 
+ * Escape  characters 
+ * 1. enter string:
+ *      1. Feed cat
+ *      2. Organize sock drawer
+ *      3. Take over world
+ * 2. write regexp to match those lines
+ * 3. \d+. [\w ]+
+ * Remember, . is actually a meta character that means “anything at all.” It doesn’t have the * quantifier here so it will only match a single character, but in this case it means strings like the below will match:
+ * 11 Take over the world
+ * 4. \d+\. [\w ]+
+ * Escaping is complicated for two reasons. First, the rules for escaping special characters are different depending on whether you’re inside a character class or not. If you are inside a character class, you need to escape the following characters if you want to match them literally: ], \, ^, -. This is because they have special significance inside character classes. Outside of character classes, you need to escape lots more things: ., ^, $, *, +, ?, (, ), [, {, \, and | all must be escaped, because otherwise they have special meanings.
+ * Note: If you’re using a language that wraps regexes in delimiters – JavaScript and PHP, for example – you will also need to escape that delimiter. The most common delimiter is /, so you will need to write \/. Regex101 uses / for a delimiter, so this warning applies there too: write \/ on Regex101!
+ * The second reason escaping is complicated – and trust me, this bit hurts my brain – is when you use regexes inside programming strings. If you’re solely using them inside a text editor then you have no problem, but when you use them inside a programming language then you need to double escape things.
+ * 5. let myString = "\d+\. [\w ]+"
+ * most programming languages use \ as their own escape sequence, there’s a problem with that pseudocode: each of those backslashes will be interpreted as an escape sequence in your programming language, rather than than an escape sequence for the regex.
+ * 6. let myString = "\\d+\\. [\\w ]+"
+ * 7. let myString = "\\\\" to match "\"
+ */
 
-let regExp = new RegExp(".*", "g")
-let matches = "some string".match(regExp)
+/**
+ * JS Syntax:
+ */
 
-console.log(`matches: `, matches);
+let regExp  = new RegExp("*.", "g");
+let matches = "some string".match(regExp);
 
+
+/**
+ * Practice:
+ */
+
+// 1
 // Write your own version of includes() method on String that ignores letter case, and without using existing includes() method.
+// Samples:
+    // solution("Hello, world", "Hello")   == true
+    // solution("Hello,wo world", "WORLD") == true
+    // solution("Hello, world", "Goodbye") == false
 
-// solution("Hello, world", "Hello")   == true
-// solution("Hello, world", "WORLD")   == true
-// solution("Hello, world", "Goodbye") == false
+function solution1(str1, str2) {
+    if (str1.length < str2.length) return false;
 
-console.assert(solution("Hello, world", "Hello")   == true,  `Error`);
-console.assert(solution("Hello, world", "WORLD")   == true,  `Error`);
-console.assert(solution("Hello, world", "Goodbye") == false, `Error`);
+    let regExp = new RegExp(str2, "i");
+    
+    return str1.search(regExp) != -1;
+}
 
+// 2
+// Write a function that accepts a string, and returns how many times a specific character appears, taking case into account.
+// Samples:
+//     solution("The rain in Spain", "a")       == 2
+//     solution("Mississippi", "i")             == 4
+//     solution("Hacking with JavaScript", "i") == 3
 
+function solution2(str1, str2) {
+    let regExp = new RegExp(str2, "g");
 
+    return str1.length - str1.replace(regExp, "").length;
+}
 
+// 3
+// Write a function that returns a string with any consecutive spaces replaced with a single space.
+// Samples:
+//     solution("a   b   c") === "a b c"
+//     solution("    a")     === " a"
+//     solution("abc")       === "abc"
 
+function solution3(str) {
+    if (str.length == 0) return str;
 
+    let regExp = new RegExp(" +", "g");
+    
+    return str.replace(regExp, " ");
+}
 
+// 4
+// Write a function that accepts array of integers that returns the number of times a specific digit appears in any of its numbers.
+// Samples:
+//     solution([5, 15, 55, "515"], "5") == 6
+//     solution([5, 15, 55, 515], "1")   == 2
+//     solution([55555], "5")            == 5
+//     solution([55555], "1")            == 0
 
+function solution4(array, num) {
+    let regExp  = new RegExp(num, "g");
+    let matches = array.join("").match(regExp);
 
+    return matches == null ? 0 : matches.length;
+}
 
+// 5
+// Given a string that contains both letters and numbers, write a function that pulls out all the numbers then returns their sum.
+// Samples:
+//     solution("a1b2c3")    == 6
+//     solution("a10b20c30") == 60
+//     solution("cks8al")    == 8
+
+function solution5(str) {
+    let regExp  = new RegExp("\\d+", "g");
+    let matches = str.match(regExp);
+    let sum     = 0;
+
+    for (let i of matches) sum += Number(i);
+    
+    return sum;
+}
