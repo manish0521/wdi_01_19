@@ -73,7 +73,7 @@ var ken = new Person('Ken Jones', 39, 'M');
 var Animal = {
     type: 'Invertebrates', // Default value of properties
     displayType: function() {  // Method which will display type of Animal
-      console.log(this.type);
+        console.log(this.type);
     }
 };
 
@@ -91,10 +91,10 @@ fish.displayType(); // Output:Fishes
 var o = {
     a: 7,
     get b() { 
-      return this.a + 1;
+        return this.a + 1;
     },
     set c(x) {
-      this.a = x / 2;
+        this.a = x / 2;
     }
 };
 
@@ -102,11 +102,11 @@ console.log(o.a); // 7
 console.log(o.b); // 8
 o.c = 50;
 console.log(o.a); // 25
-  
+
 var d = Date.prototype;
 Object.defineProperty(d, 'year', {
-  get: function() { return this.getFullYear(); },
-  set: function(y) { this.setFullYear(y); }
+    get: function() { return this.getFullYear(); },
+    set: function(y) { this.setFullYear(y); }
 });
 
 var now = new Date();
@@ -152,8 +152,8 @@ var obj = {};
 var str = "Good morning";
 
 function sum(x, y){
-   total = x + y;
-   return total;
+    total = x + y;
+    return total;
 }
 
 numr = sum(4, 3);
@@ -167,8 +167,8 @@ MYAPP.obj = {};
 MYAPP.str = "Good morning";
 
 MYAPP.sum = function(x, y){
-   var total = x + y;
-   return total;
+    var total = x + y;
+    return total;
 }
 
 MYAPP.num = MYAPP.sum(4, 3);
