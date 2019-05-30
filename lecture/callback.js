@@ -341,3 +341,20 @@ ajax( "..pre-cached-url..", asyncify( result ) );
 a++;
 
 // Whether the Ajax request is in the cache and resolves to try to call the callback right away, or must be fetched over the wire and thus complete later asynchronously, this code will always output 1 instead of 0Whether the Ajax request is in the cache and resolves to try to call the callback right away, or must be fetched over the wire and thus complete later asynchronously, this code will always output 1 instead of 0
+
+
+// Write an extension for array that reimplements the "map()" method.
+/*
+   Samples:
+   [1, 2, 3].solution(e => `${e}`)                == [‘1’, ‘2’, ‘3’]
+   [‘1’, ‘2’, ‘3’].solution(e => parseInt(e))     == [1, 2, 3]
+   [8, 3, 6].solution((e, i) => `${i}: ${e * 2}`) == [‘0: 16’, ‘1: 6’, ‘2: 12’]
+*/
+
+Array.prototype.solution = function(callback) {
+    let arr = [];
+
+    for (let i = 0; i < this.length; i++) arr.push(callback(this[i], i, this));
+
+    return arr;
+}
