@@ -1,0 +1,16 @@
+.card-body{
+    background-color: greenyellow;
+}
+
+.card-header{
+    background-color: lightblue;
+}
+
+input{
+    background: aquamarine;
+    
+}
+
+.card-title {
+ color: red;
+}
