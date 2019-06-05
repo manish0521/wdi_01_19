@@ -4,6 +4,9 @@ window.onload = function () {
 
 function init() { 
     document.getElementById("submit").addEventListener("click", submit); 
+    document.getElementById("lead").innerHTML = formatAMPM();
+
+
     let httpRequest 
 
     function makeRequest() {
@@ -77,7 +80,18 @@ function init() {
         makeRequest()
 
     }
+
+    function formatAMPM() {
+        let d = new Date(),
+            minutes = d.getMinutes().toString().length == 1 ? '0'+d.getMinutes() : d.getMinutes(),
+            hours = d.getHours().toString().length == 1 ? '0'+d.getHours() : d.getHours(),
+            ampm = d.getHours() >= 12 ? 'pm' : 'am',
+            months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        return days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+d.getFullYear()+' '+hours+':'+minutes+ampm;
+        }
     
 
-    makeRequest()
+    makeRequest();
+    formatAMPM();
 }
