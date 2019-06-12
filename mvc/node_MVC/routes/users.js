@@ -25,9 +25,8 @@ router.get('/', function(req, res, next) {
   
 });
 
+// Add emailExist and userExist checks to create user rout
 
-
-
-router.post('/createuser', signupController.createUser)
+router.post('/createuser', signupController.checkExistEmail, signupController.checkExistUsername, signupController.createUser)
 
 module.exports = router;

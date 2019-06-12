@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 
 module.exports = {
     checkExistEmail: (req, res, next) => {
-        user.findOne({email:req.body.email}, function (error, user) {
+        User.findOne({email: req.body.email}, function (error, user) {
             if(error){
                 res.status(400).json({
                     confirmation:'failure',
@@ -27,7 +27,9 @@ module.exports = {
 
     checkExistUsername: (req, res, next) => {
         // write
-        username.findOne({username:req.body.username}, function (error, user) {
+        User.findOne({username: req.body.username}, function (error, user) {
+            console.log('31: ', );
+            
             if(error){
                 res.status(400).json({
                     confirmation:'failure',
